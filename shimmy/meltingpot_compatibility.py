@@ -124,9 +124,10 @@ class MeltingPotCompatibilityV0(ParallelEnv, EzPickle):
         Returns:
             observation_space: spaces.Space
         """
-        observation_space = utils.remove_world_observations_from_space(
-            utils.dm_spec2gym_space(self._env.observation_spec()[0])  # type: ignore
-        )
+        # observation_space = utils.remove_world_observations_from_space(
+        #     utils.dm_spec2gym_space(self._env.observation_spec()[0])  # type: ignore
+        # )
+        observation_space = utils.dm_spec2gym_space(self._env.observation_spec()[0]['RGB'])
         return observation_space
 
     @functools.lru_cache(maxsize=None)
@@ -174,11 +175,14 @@ class MeltingPotCompatibilityV0(ParallelEnv, EzPickle):
         self.agents = self.possible_agents[:]
         self.num_cycles = 0
 
+        # print(timestep)
+        # exit()
         observations = utils.timestep_to_observations(timestep)
 
         return observations, {
-            "step-type": timestep.step_type,
-            "discount": timestep.discount,
+            agent: {} for agent in self.agents
+            # "step-type": timestep.step_type,
+            # "discount": timestep.discount,
         }
 
     def step(

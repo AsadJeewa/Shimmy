@@ -51,10 +51,12 @@ def timestep_to_observations(timestep: dm_env.TimeStep) -> ObsDict:
         observation, reward, terminated, truncated, info.
     """
     gym_observations = {}
+    #TEMP FIX FOR SUPERSUIT
     for index, observation in enumerate(timestep.observation):
-        gym_observations[PLAYER_STR_FORMAT.format(index=index)] = {
-            key: value for key, value in observation.items() if _WORLD_PREFIX not in key
-        }
+        # gym_observations[PLAYER_STR_FORMAT.format(index=index)] = {
+        #     key: value for key, value in observation.items() if _WORLD_PREFIX not in key
+        # }
+        gym_observations[PLAYER_STR_FORMAT.format(index=index)] = observation['RGB']
     return gym_observations
 
 
