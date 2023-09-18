@@ -56,7 +56,7 @@ def timestep_to_observations(timestep: dm_env.TimeStep) -> ObsDict:
         # gym_observations[PLAYER_STR_FORMAT.format(index=index)] = {
         #     key: value for key, value in observation.items() if _WORLD_PREFIX not in key
         # }
-        gym_observations[PLAYER_STR_FORMAT.format(index=index)] = observation['RGB']
+        gym_observations[PLAYER_STR_FORMAT.format(index=index)] = observation['WORLD.RGB']
     return gym_observations
 
 

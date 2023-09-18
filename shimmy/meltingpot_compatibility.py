@@ -127,7 +127,7 @@ class MeltingPotCompatibilityV0(ParallelEnv, EzPickle):
         # observation_space = utils.remove_world_observations_from_space(
         #     utils.dm_spec2gym_space(self._env.observation_spec()[0])  # type: ignore
         # )
-        observation_space = utils.dm_spec2gym_space(self._env.observation_spec()[0]['RGB'])
+        observation_space = utils.dm_spec2gym_space(self._env.observation_spec()[0]['WORLD.RGB'])
         return observation_space
 
     @functools.lru_cache(maxsize=None)
@@ -175,12 +175,9 @@ class MeltingPotCompatibilityV0(ParallelEnv, EzPickle):
         self.agents = self.possible_agents[:]
         self.num_cycles = 0
 
-        # print(timestep)
-        # exit()
         observations = utils.timestep_to_observations(timestep)
-
         return observations, {
-            agent: {} for agent in self.agents
+            self.agents[i]: timestep.observation[i]["VECTOR_REWARD"] for i in range(len(self.agents))
             # "step-type": timestep.step_type,
             # "discount": timestep.discount,
         }
@@ -209,7 +206,7 @@ class MeltingPotCompatibilityV0(ParallelEnv, EzPickle):
         terminations = {agent: termination for agent in self.agents}
         truncation = self.num_cycles >= self.max_cycles
         truncations = {agent: truncation for agent in self.agents}
-        infos = {agent: {} for agent in self.agents}
+        infos = {self.agents[i]: timestep.observation[i]["VECTOR_REWARD"] for i in range(len(self.agents))}
         if termination or truncation:
             self.agents = []
 
